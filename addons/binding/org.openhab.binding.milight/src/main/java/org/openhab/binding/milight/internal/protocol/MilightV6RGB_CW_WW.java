@@ -59,7 +59,6 @@ public class MilightV6RGB_CW_WW extends MilightV6 {
             return;
         }
 
-        setPower(true, state);
         sendQueue.queueRepeatable(uidc(CAT_NIGHTMODE), make_command(4, 5));
     }
 

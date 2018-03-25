@@ -131,17 +131,18 @@ public abstract class MilightV6 extends AbstractBulbInterface {
 
         value = Math.min(Math.max(value, 0), 100);
 
-        if (value == 0) {
+        // Turn off if dimmed to minimum
+        if(value == 0) {
             setPower(false, state);
-        } else if (state.brightness == 0) {
-            // If if was dimmed to minimum (off), turn it on again
+        } else {
+            // turn on for any brightness to get out of night mode
             setPower(true, state);
+            
+            int br = (value * MAX_BR) / 100;
+            br = Math.min(br, MAX_BR);
+            br = Math.max(br, 0);
+            sendQueue.queueRepeatable(uidc(CAT_BRIGHTNESS_SET), make_command(getBrCmd(), br));
         }
-
-        int br = (value * MAX_BR) / 100;
-        br = Math.min(br, MAX_BR);
-        br = Math.max(br, 0);
-        sendQueue.queueRepeatable(uidc(CAT_BRIGHTNESS_SET), make_command(getBrCmd(), br));
 
         state.brightness = value;
     }
